@@ -57,8 +57,8 @@ using namespace std;
 {
     random_device rd;       // Гениратор случайных числе
     mt19937 gen(rd());
-    uniform_int_distribution<> dist(5,10);       //Диапозон стрижки клиентов в секундах
-    int cutting_customer_id = 0;
+    uniform_int_distribution<> dist(1,2);       //Диапозон стрижки клиентов в секундах
+    int cutting_customer_id;
 
     while (true)
     {
@@ -105,11 +105,18 @@ int main()
     queue<int> customers_queue;
     int places;
     cout<<"Enter the number of places in the barbershop: ";
-    cin>>places;
+
+    while (true)
+    {
+        if (cin>>places && places > 0)
+            break;
+        cout<<"Invalid input: "<<endl;
+    }
 
     thread barber(barberBehavior, ref(customers_queue));
     thread customers(customerBehavior, ref(customers_queue), places);
 
     customers.join();
     barber.join();
+    return 0;
 }
